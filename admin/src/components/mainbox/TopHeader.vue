@@ -12,7 +12,7 @@
         </div>
 
         <div class="right">
-            <span>欢迎 admin 回来</span>
+            <span>欢迎 {{ store.state.userInfo.username }} 回来</span>
             <el-dropdown>
                 <span class="el-dropdown-link">
                     <el-icon :size="30" color="white">
@@ -48,6 +48,7 @@ const handleCenter = () => {
 
 const handleLogout = () => {
     localStorage.removeItem('token')
+    store.commit('clearUserInfo')
     router.push('/login')
 }
 </script>

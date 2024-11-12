@@ -25,7 +25,14 @@ const UserController = {
             
             res.header('Authorization', token)
             res.send({
-                ActionType: 'OK'
+                ActionType: 'OK',
+                data: {
+                    username: result[0].username,
+                    gender: result[0].gender ? result[0].gender : 0,  // 性别 ,0,1,2
+                    introduction: result[0].introduction, // 简介
+                    avatar: result[0].avatar,
+                    role: result[0].role  // 管理员1 ,编辑2
+                }
             })
         }
     }
