@@ -51,7 +51,11 @@ import { computed } from 'vue'
 const store = useStore()
 // console.log(store.state)
 
-const avatarUrl = computed(() => store.state.userInfo.avatar ? store.state.userInfo.avatar : `https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png`)
+const avatarUrl = computed(() =>
+    store.state.userInfo.avatar
+      ? 'http://localhost:3000' + store.state.userInfo.avatar
+      : `https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png`
+)
 const welcomeText = computed(() => new Date().getHours() < 12 ? '要开心每一天.' : '喝杯咖啡提提神吧.')
 </script>
 
