@@ -83,6 +83,7 @@
                                 action="https://jsonplaceholder.typicode.com/posts/"
                                 :show-file-list="false"
                                 :auto-upload="false"
+                                :on-change="handleChange"
                             >
                                 <img
                                     v-if="userForm.avatar"
@@ -97,6 +98,13 @@
                                 </el-icon>
                             </el-upload>
                         </el-form-item>
+
+                        <el-form-item>
+                            <el-button
+                                type="primary"
+                                @click="submitForm()"
+                            >更新</el-button>
+                        </el-form-item>
                     </el-form>
                 </el-card>
             </el-col>
@@ -108,6 +116,7 @@
 import { useStore } from "vuex"
 import { computed, ref, reactive } from "vue"
 import { Plus } from '@element-plus/icons-vue'
+import axios from 'axios'
 const store = useStore();
 
 const avatarUrl = computed(() =>
@@ -145,6 +154,33 @@ const options = [
     value: 2
   }
 ];
+
+// 每次选择完图片之后的回调
+const handleChange = file => {
+    // console.log(file.raw);
+    userForm.avatar = URL.createObjectURL(file.raw);
+    userForm.file = file.raw
+}
+
+const submitForm = () => {
+    userFormRef.value.validate((valid) => {
+        if (valid) {
+            // console.log('submit', userForm);
+            const params = new FormData()
+            for (let i in userForm) {
+                params.append(i, userForm[i])
+            }
+            // console.log(params)
+            axios.post('/adminapi/user/upload', params, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            }).then((res) => {
+                console.log(res.data)
+            })
+        }
+    })
+}
 </script>
 
 <style scoped lang="scss">
@@ -171,5 +207,9 @@ const options = [
   width: 178px;
   height: 178px;
   text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
 }
 </style>
