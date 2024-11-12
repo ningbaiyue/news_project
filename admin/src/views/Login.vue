@@ -36,6 +36,7 @@
 <script setup>
 import { reactive, ref } from "vue"
 import { useRouter } from 'vue-router'
+import axios from 'axios'
 
 const loginForm = reactive({
     username:"",
@@ -58,10 +59,12 @@ const submitForm = ()=>{
     loginFormRef.value.validate((valid)=>{
         console.log(valid)
         if(valid){
-            console.log(loginForm)
-            localStorage.setItem("token", "nby");
-
-            router.push("/index")
+            // console.log(loginForm)
+            // localStorage.setItem("token", "nby");
+            axios.post('/adminapi/user/login', loginForm).then(res => {
+                console.log('11',res.data)
+            })
+            // router.push("/index")
         }
     })
     //2. 拿到表单内容,提交后台
