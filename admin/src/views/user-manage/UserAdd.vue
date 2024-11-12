@@ -51,7 +51,7 @@
             </el-form-item>
 
             <el-form-item label="头像" prop="avatar">
-                <Upload :avatar="userForm.avatar" @kerwinchange="handleChange" />
+                <Upload :avatar="userForm.avatar" @uploadchange="handleChange" />
             </el-form-item>
 
             <el-form-item>
@@ -62,16 +62,19 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
-import Upload from "@/components/upload/Upload";
+import { ref, reactive } from "vue"
+import Upload from "@/components/upload/Upload"
+import upload from '@/util/upload'
+import { useRouter } from 'vue-router'
 const userFormRef = ref();
 const userForm = reactive({
   username: "",
   password: "",
-  role: 2, //1 是管理员 ,2编辑
+  role: 2, // 1 是管理员 ,2编辑
   introduction: "",
   avatar: "",
-  file: null
+  file: null,
+  gender: 0 // 保密
 });
 
 const userFormRules = reactive({
@@ -99,11 +102,14 @@ const handleChange = (file) => {
   userForm.file = file;
 };
 
+const router = useRouter()
 const submitForm = () => {
-    userFormRef.value.validate((valid) => {
+    userFormRef.value.validate(async (valid) => {
         if(valid){
             // 提交数据到后端
-            console.log(userForm)
+            await upload('/adminapi/user/add', userForm)
+            
+            router.push(`/user-manage/userlist`)
         }
     })
 }
