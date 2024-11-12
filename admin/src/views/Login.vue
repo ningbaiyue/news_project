@@ -37,6 +37,7 @@
 import { reactive, ref } from "vue"
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 const loginForm = reactive({
     username:"",
@@ -59,12 +60,14 @@ const submitForm = ()=>{
     loginFormRef.value.validate((valid)=>{
         console.log(valid)
         if(valid){
-            // console.log(loginForm)
-            // localStorage.setItem("token", "nby");
             axios.post('/adminapi/user/login', loginForm).then(res => {
                 console.log('11',res.data)
+                if (res.data.ActionType === 'OK') {
+                    router.push("/index")
+                } else {
+                    ElMessage.error('用户名和密码不匹配')
+                }
             })
-            // router.push("/index")
         }
     })
     //2. 拿到表单内容,提交后台
