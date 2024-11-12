@@ -17,7 +17,7 @@
                      <el-avatar :size="100" :src="avatarUrl" />
                     </el-col>
                 <el-col :span="20">
-                    <h3 style="line-height:100px;">欢迎 {{store.state.userInfo.username}} 回来, {{welcomeText}}</h3>
+                    <h3 style="line-height:100px;">欢迎 {{ store.state.userInfo.username }} 回来, {{ welcomeText }}</h3>
                 </el-col>
             </el-row>
         </el-card>
