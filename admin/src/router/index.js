@@ -31,24 +31,51 @@ router.beforeEach((to, from, next) => {
   if (to.name === 'login') {
     next()
   } else {
-    if (!store.state.isGetterRouter) {
-      ConfigRouter()
+    // 如果授权(已经登录过了) next()
+    // 未授权, 重定向到login
+    if (!localStorage.getItem('token')) {
       next({
-        path: to.fullPath
+        path: '/login'
       })
     } else {
-      next()
+      if (!store.state.isGetterRouter) {
+        // 删除所有的嵌套路由
+        // mainbox
+        router.removeRoute("mainbox")
+
+        ConfigRouter()
+        next({
+          path: to.fullPath
+        })
+      } else {
+        next()
+      }
     }
   }
 })
 
 const ConfigRouter = () => {
+  if (!router.hasRoute('mainbox')) {
+    router.addRoute({
+      path: '/mainbox',
+      name: 'mainbox',
+      component: MainBox
+    })
+  }
+  
   RoutesConfig.forEach(item => {
-    router.addRoute('mainbox', item)
+    checkPermission(item) && router.addRoute('mainbox', item)
   })
 
   // 改变isGetterRouter =  true
 
   store.commit("changeGetterRouter",true)
+}
+
+const checkPermission = (item) => {
+  if (item.requireAdmin) {
+    return store.state.userInfo.role === 1
+  }
+  return true
 }
 export default router
