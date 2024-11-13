@@ -2,7 +2,6 @@
  * @作者: NingBY
  * @Date: 2024-11-12 01:08:08
  */
-const { upload } = require('../../controllers/admin/UserController')
 const UserModel = require('../../models/UserModel')
 
 const UserService = {
@@ -31,6 +30,15 @@ const UserService = {
         return UserModel.create({
             username, introduction, gender, avatar, password, role
         })
+    },
+    getList: async ({ id }) => {
+        return id ? UserModel.find({ _id: id }, ['username', 'role', 'password', 'introduction']) : UserModel.find({}, ['username', 'role', 'avatar', 'introduction', 'gender'])
+    },
+    putList: async (body) => {
+        return UserModel.updateOne({ _id: body._id }, body)
+    },
+    delList: async ({ _id }) => {
+        return UserModel.deleteOne({ _id })
     }
 }
 
