@@ -2,6 +2,7 @@
  * @作者: NingBY
  * @Date: 2024-11-15 00:24:56
  */
+const { getList } = require('../../controllers/admin/NewsController')
 const NewsModel = require('../../models/NewsModel')
 
 const NewsService = {
@@ -9,6 +10,9 @@ const NewsService = {
         return NewsModel.create({
             title, content, category, cover, isPublish, editTime
         })
+    },
+    getList: async () => {
+        return NewsModel.find({})
     }
 }
 

@@ -11,5 +11,6 @@ const upload = multer({ dest: 'public/newsuploads/' })
 
 // 涉及文件上传, 普通post不行, 需要加上 multer中间件
 NewsRouter.post('/adminapi/news/add', upload.single('file'), NewsController.add)
+NewsRouter.get('/adminapi/news/list', NewsController.getList)
 
 module.exports = NewsRouter
