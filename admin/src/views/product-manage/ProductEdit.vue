@@ -1,14 +1,15 @@
 <!--
  * @作者: NingBY
- * @Date: 2024-11-10 17:47:54
+ * @Date: 2024-11-16 01:20:49
 -->
 <template>
     <div>
         <el-page-header
-            content="添加产品"
-            icon=""
+            content="编辑产品"
+            @back="handleBack()"
             title="产品管理"
         />
+
         <el-form
             ref="productFormRef"
             :model="productForm"
@@ -33,17 +34,18 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="submitForm()">添加产品</el-button>
+                <el-button type="primary" @click="submitForm()">更新产品</el-button>
             </el-form-item>
         </el-form>
     </div>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import Upload from "@/components/upload/Upload"
 import upload from '@/util/upload'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import axios from 'axios'
 
 const productFormRef = ref()
 const productForm = reactive({
@@ -67,15 +69,31 @@ const handleUploadChange = (file) => {
 }
 
 const router = useRouter()
+const route = useRoute()
 const submitForm = () => {
     productFormRef.value.validate(async (valid) => {
         if (valid) {
             // console.log(productForm)
             // 后台通信,
-            await upload('/adminapi/product/add', productForm)
-            router.push(`/product-manage/productlist`)
+            await upload('/adminapi/product/list', productForm)
+            router.back()
         }
     })
+}
+
+const handleBack = () => {
+    router.back()
+}
+
+onMounted(() => {
+    getDate()
+})
+
+const getDate = async () => {
+    const res = await axios.get(`/adminapi/product/list/${route.params.id}`)
+    // console.log(res.data)
+    
+    Object.assign(productForm, res.data.data[0])
 }
 </script>
 
