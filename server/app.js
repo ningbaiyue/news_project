@@ -10,10 +10,11 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const JWT = require('./util/JWT');
 const UserRouter = require('./routes/admin/UserRouter');
 const NewsRouter = require('./routes/admin/NewsRouter');
+const webNewsRouter = require('./routes/web/NewsRouter');
 const ProductRouter = require('./routes/admin/ProductRouter');
-const JWT = require('./util/JWT');
 
 var app = express();
 
@@ -29,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use(webNewsRouter)
 
 /*
  /adminapi/* - 后台系统用的
