@@ -15,6 +15,7 @@ const UserRouter = require('./routes/admin/UserRouter');
 const NewsRouter = require('./routes/admin/NewsRouter');
 const webNewsRouter = require('./routes/web/NewsRouter');
 const ProductRouter = require('./routes/admin/ProductRouter');
+const webProductRouter = require('./routes/web/ProductRouter');
 
 var app = express();
 
@@ -32,6 +33,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use(webNewsRouter)
+app.use(webProductRouter)
 
 /*
  /adminapi/* - 后台系统用的
